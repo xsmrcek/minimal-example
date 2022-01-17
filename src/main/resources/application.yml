@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: minimal-example
+    admin:
+      enabled: true
+      jmx-name: "${spring.jmx.default-domain}:type=admin"
+  main:
+    banner-mode: off
+  jmx:
+    enabled: false
+    default-domain: ${spring.application.name}
+  jackson:
+    default-property-inclusion: non_null
+
+webclient:
+  default-http-connector:
+    enabled: true
+    timeouts:
+      read:
+        value: 10
+      write:
+        value: 10
+      connect:
+        value: 3
+
+logging.level.org.zalando.logbook: TRACE
