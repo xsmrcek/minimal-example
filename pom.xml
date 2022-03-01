@@ -28,7 +28,8 @@
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
         <jaxb2-fluent.api.version>3.0</jaxb2-fluent.api.version>
         <jaxb2-basics-runtime.version>1.11.1</jaxb2-basics-runtime.version>
-        <logbook.version>2.4.1</logbook.version>
+        <logbook.version>2.14.0</logbook.version>
+        <logback.contrib.version>0.1.5</logback.contrib.version>
     </properties>
 
     <build>
@@ -290,6 +291,22 @@
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-jackson</artifactId>
+            <version>${logback.contrib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-classic</artifactId>
+            <version>${logback.contrib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-core</artifactId>
+            <version>${logback.contrib.version}</version>
         </dependency>
 
         <dependency>
