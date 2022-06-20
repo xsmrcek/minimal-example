@@ -1,0 +1,44 @@
+{
+  "connectionString": "please fill yours :)",
+  "role": {
+    "name": "MY ROLE NAME"
+  },
+  "sampling": {
+    "percentage": 100
+  },
+  "instrumentation": {
+    "logging": {
+      "level": "WARN"
+    },
+    "micrometer": {
+      "enabled": true
+    }
+  },
+  "preview": {
+    "additionalPropagators": [
+      "b3multi",
+      "b3"
+    ],
+    "ignoreRemoteParentNotSampled": false,
+    "sampling": {
+      "overrides": [
+        {
+          "attributes": [
+            {
+              "key": "http.url",
+              "value": "https?://[^/]+/actuator.*",
+              "matchType": "regexp"
+            }
+          ],
+          "percentage": 0
+        }
+      ]
+    },
+    "inheritedAttributes": [
+      {
+        "key": "CustomKey",
+        "type": "string"
+      }
+    ]
+  }
+}

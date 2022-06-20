@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.5</version>
+        <version>2.7.0</version>
         <relativePath/>
     </parent>
 
@@ -19,19 +19,20 @@
         <java.version>15</java.version>
         <logbook.version>2.4.1</logbook.version>
         <java.version>15</java.version>
-        <spring-cloud.version>2020.0.4</spring-cloud.version>
-        <kotlin.version>1.5.31</kotlin.version>
-        <kotlin-coroutines.version>1.5.2-native-mt</kotlin-coroutines.version>
-        <kotlin-logging.version>2.0.11</kotlin-logging.version>
-        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
-        <springdoc-openapi-ui.version>1.5.7</springdoc-openapi-ui.version>
+        <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <kotlin.version>1.6.21</kotlin.version>
+        <kotlin-coroutines.version>1.6.2</kotlin-coroutines.version>
+        <kotlin-logging.version>2.1.23</kotlin-logging.version>
+        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
         <jaxb2-fluent.api.version>3.0</jaxb2-fluent.api.version>
         <jaxb2-basics-runtime.version>1.11.1</jaxb2-basics-runtime.version>
         <logbook.version>2.14.0</logbook.version>
         <logback.contrib.version>0.1.5</logback.contrib.version>
-        <opentelemetry-version>1.11.0</opentelemetry-version>
+        <opentelemetry-version>1.13.0</opentelemetry-version>
         <applicationinsights-core-version>2.6.4</applicationinsights-core-version>
+        <testcontainers.version>1.17.2</testcontainers.version>
     </properties>
 
     <build>
@@ -342,6 +343,73 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>applicationinsights-core</artifactId>
             <version>${applicationinsights-core-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor.rabbitmq</groupId>
+            <artifactId>reactor-rabbitmq</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility-kotlin</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.skyscreamer</groupId>
+                    <artifactId>jsonassert</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.xmlunit</groupId>
+                    <artifactId>xmlunit-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>rabbitmq</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-wiremock</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

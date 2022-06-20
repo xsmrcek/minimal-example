@@ -24,3 +24,23 @@ webclient:
         value: 3
 
 logging.level.org.zalando.logbook: TRACE
+
+rabbit-configuration:
+  connection:
+    host: test_host
+    port: 5672
+    virtual-host: virtual_host
+    username: sample_user
+    password: sample_password
+
+rabbit-messaging:
+  ssl: true
+  subscription-delay: 1000
+  connection-name: reactor-rabbit
+  queue:
+    name: sample
+    durable: true
+    exclusive: false
+    autoDelete: false
+    exchange: exchange
+    routing-key: routing_key
