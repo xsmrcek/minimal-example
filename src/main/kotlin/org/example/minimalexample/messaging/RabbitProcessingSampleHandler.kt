@@ -1,10 +1,9 @@
 package org.example.minimalexample.messaging
 
-import io.opentelemetry.api.OpenTelemetry
+import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.api.trace.Span
 import io.opentelemetry.context.Context
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactive.awaitSingle
 import mu.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -21,7 +20,7 @@ class RabbitProcessingSampleHandler(
     private val logger = KotlinLogging.logger(javaClass.name)
 
     suspend fun handle(): Int {
-            val tracer = OpenTelemetry.noop().getTracer("")
+            val tracer = GlobalOpenTelemetry.getTracerProvider().tracerBuilder("my-tracer").build()
             val parentSpan = Span.current()
 
             val newSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan().apply { makeCurrent() }

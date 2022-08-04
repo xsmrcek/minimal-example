@@ -22,7 +22,6 @@ class ClientRequestHandler(logbook: Logbook): ChannelDuplexHandler() {
     }
 
     private fun handleWithMdc(block: () -> Unit) {
-        logger.info { Span.current().spanContext.traceId }
         block()
     }
 }

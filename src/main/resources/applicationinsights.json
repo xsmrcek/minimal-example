@@ -12,6 +12,9 @@
     },
     "micrometer": {
       "enabled": true
+    },
+    "rabbitmq": {
+      "enabled": false
     }
   },
   "preview": {
