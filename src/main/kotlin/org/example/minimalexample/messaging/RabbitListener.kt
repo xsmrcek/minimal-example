@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import org.apache.logging.log4j.ThreadContext
 import org.example.minimalexample.config.MessagingConfiguration
 import org.springframework.amqp.core.*
 import org.springframework.amqp.core.Queue
@@ -76,9 +77,10 @@ class RabbitListeners(
                         val currentSpan = createSpan(b3).startSpan().apply { makeCurrent() }
                         setSpanCustomDimensions()
                         val startTime = System.currentTimeMillis()
-                        val telemetryRequest = RequestTelemetry()
+                        val telemetryRequest = com.microsoft.applicationinsights.web.internal.ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry ?: RequestTelemetry()
+                        telemetryRequest.properties.put("asd", "dsa")
                         telemetryRequest.context.operation.id = Span.current().spanContext.traceId
-                        telemetryRequest.context.operation.parentId = Span.current().spanContext.spanId
+                        telemetryRequest.context.operation.setParentId(Span.current().spanContext.spanId)
                         telemetryRequest.name = "handling my custom rabbit MQ message" //name of your event
                         try {
                             logger.info { "Received notification with body: '${String(delivery.body)}' and properties '${delivery.properties}'" }

@@ -32,6 +32,7 @@
         <logback.contrib.version>0.1.5</logback.contrib.version>
         <opentelemetry-version>1.16.0</opentelemetry-version>
         <applicationinsights-core-version>2.6.4</applicationinsights-core-version>
+        <applicationinsights-web-version>3.4.0-BETA</applicationinsights-web-version>
         <testcontainers.version>1.17.2</testcontainers.version>
     </properties>
 
@@ -339,11 +340,18 @@
             <artifactId>opentelemetry-extension-annotations</artifactId>
             <version>${opentelemetry-version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>applicationinsights-core</artifactId>
             <version>${applicationinsights-core-version}</version>
+        </dependency-->
+        <!-- https://mvnrepository.com/artifact/com.microsoft.azure/applicationinsights-web -->
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>applicationinsights-web</artifactId>
+            <version>${applicationinsights-web-version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.projectreactor.rabbitmq</groupId>
             <artifactId>reactor-rabbitmq</artifactId>
