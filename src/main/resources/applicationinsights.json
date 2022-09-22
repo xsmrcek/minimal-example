@@ -22,10 +22,11 @@
       "b3multi",
       "b3"
     ],
-    "ignoreRemoteParentNotSampled": false,
     "sampling": {
+      "parentBased": true,
       "overrides": [
         {
+          "telemetryKind": "request",
           "attributes": [
             {
               "key": "http.url",

@@ -2,15 +2,14 @@ package org.example.minimalexample.messaging
 
 import com.microsoft.applicationinsights.TelemetryClient
 import com.microsoft.applicationinsights.telemetry.RequestTelemetry
+import com.microsoft.applicationinsights.web.internal.ThreadContext
 import io.opentelemetry.api.GlobalOpenTelemetry
-import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.api.trace.*
 import io.opentelemetry.context.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import org.apache.logging.log4j.ThreadContext
 import org.example.minimalexample.config.MessagingConfiguration
 import org.springframework.amqp.core.*
 import org.springframework.amqp.core.Queue
@@ -77,7 +76,7 @@ class RabbitListeners(
                         val currentSpan = createSpan(b3).startSpan().apply { makeCurrent() }
                         setSpanCustomDimensions()
                         val startTime = System.currentTimeMillis()
-                        val telemetryRequest = com.microsoft.applicationinsights.web.internal.ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry ?: RequestTelemetry()
+                        val telemetryRequest = ThreadContext.getRequestTelemetryContext()!!.httpRequestTelemetry
                         telemetryRequest.properties.put("asd", "dsa")
                         telemetryRequest.context.operation.id = Span.current().spanContext.traceId
                         telemetryRequest.context.operation.setParentId(Span.current().spanContext.spanId)
