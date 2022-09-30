@@ -76,20 +76,22 @@ class RabbitListeners(
                         val currentSpan = createSpan(b3).startSpan().apply { makeCurrent() }
                         setSpanCustomDimensions()
                         val startTime = System.currentTimeMillis()
-                        val telemetryRequest = ThreadContext.getRequestTelemetryContext()!!.httpRequestTelemetry
-                        telemetryRequest.properties.put("asd", "dsa")
+                        val telemetryRequest = ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry ?: RequestTelemetry()
+                        telemetryRequest.properties.put("CustomKey", "my attribute")
                         telemetryRequest.context.operation.id = Span.current().spanContext.traceId
                         telemetryRequest.context.operation.setParentId(Span.current().spanContext.spanId)
                         telemetryRequest.name = "handling my custom rabbit MQ message" //name of your event
                         try {
                             logger.info { "Received notification with body: '${String(delivery.body)}' and properties '${delivery.properties}'" }
-                            val number = handler.handle()
+                            val number = handler.handle(String(delivery.body))
                             logger.info { "Notification processed successfully with number $number" }
                             telemetryRequest.isSuccess = true
+                            telemetryRequest.responseCode = "200"
                             delivery.ack()
                         } catch (exception: Exception) {
                             logger.error(exception) { "failed to process notification" }
                             telemetryRequest.isSuccess = false
+                            telemetryRequest.responseCode = "500"
                             delivery.nack(false)
                         } finally {
                             val endTime = System.currentTimeMillis()

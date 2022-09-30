@@ -19,7 +19,7 @@ class RabbitProcessingSampleHandler(
 
     private val logger = KotlinLogging.logger(javaClass.name)
 
-    suspend fun handle(): Int {
+    suspend fun handle(body: String): Int {
             val tracer = GlobalOpenTelemetry.getTracerProvider().tracerBuilder("my-tracer").build()
             val parentSpan = Span.current()
 
@@ -28,6 +28,9 @@ class RabbitProcessingSampleHandler(
                 //just call google here :)
                 callGoogle()
                 logger.info {"just called google"}
+                if (body == "let's fail"){
+                    throw IllegalStateException()
+                }
             } finally {
                 newSpan.end()
             }

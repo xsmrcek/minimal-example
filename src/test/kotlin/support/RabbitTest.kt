@@ -20,7 +20,7 @@ internal class RabbitTest(): BaseTest(){
 
     private val testSender by lazy { RabbitFlux.createSender(SenderOptions().connectionMono(connectionMono)) }
 
-    private fun sendTestNotification() {
+    private fun sendTestNotification(body: String) {
         val response =
                 testSender
                         .sendWithPublishConfirms(
@@ -31,7 +31,7 @@ internal class RabbitTest(): BaseTest(){
                                                 AMQP.BasicProperties.Builder()
                                                         .messageId(RandomStringUtils.randomAlphanumeric(7))
                                                         .build(),
-                                                "random body".toByteArray()
+                                                body.toByteArray()
                                         )
                                 ),
                                 SendOptions().trackReturned(true)
@@ -45,8 +45,14 @@ internal class RabbitTest(): BaseTest(){
     }
 
     @Test
-    fun `ApplicationDocumentationPreparedNotification test`() {
-        sendTestNotification()
+    fun `success test`() {
+        sendTestNotification("random body")
+
+    }
+
+    @Test
+    fun `error test test`() {
+        sendTestNotification("let's fail")
 
     }
 }
