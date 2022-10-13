@@ -324,6 +324,11 @@
             <artifactId>opentelemetry-api</artifactId>
             <version>${opentelemetry-version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-extension-kotlin</artifactId>
+            <version>${opentelemetry-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.microsoft.azure</groupId>

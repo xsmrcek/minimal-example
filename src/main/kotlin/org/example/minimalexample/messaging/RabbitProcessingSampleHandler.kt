@@ -3,7 +3,9 @@ package org.example.minimalexample.messaging
 import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.api.trace.Span
 import io.opentelemetry.context.Context
+import io.opentelemetry.extension.kotlin.asContextElement
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -24,26 +26,22 @@ class RabbitProcessingSampleHandler(
             val parentSpan = Span.current()
 
             val newSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan().apply { makeCurrent() }
-            try {
+            withContext(newSpan.asContextElement()) {
                 //just call google here :)
                 callGoogle()
                 logger.info {"just called google"}
                 if (body == "let's fail"){
                     throw IllegalStateException()
                 }
-            } finally {
-                newSpan.end()
             }
 
             // here I would construct message
             val messageSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan().apply { makeCurrent() }
-            try {
+            withContext(messageSpan.asContextElement()) {
                 //and send it using azure service bus here, but let's just call google again
                 callGoogle()
                 logger.info {"just called google"}
 
-            } finally {
-                messageSpan.end()
             }
         return Random.nextInt()
     }

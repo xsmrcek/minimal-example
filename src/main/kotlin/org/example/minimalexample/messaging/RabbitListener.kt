@@ -6,9 +6,11 @@ import com.microsoft.applicationinsights.web.internal.ThreadContext
 import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.api.trace.*
 import io.opentelemetry.context.Context
+import io.opentelemetry.extension.kotlin.asContextElement
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import org.example.minimalexample.config.MessagingConfiguration
 import org.springframework.amqp.core.*
@@ -73,35 +75,40 @@ class RabbitListeners(
                 .subscribe { delivery ->
                     mono(context = Dispatchers.IO) {
                         val b3 = delivery.properties.headers["b3"]?.toString()?.split('-') ?: emptyList()
-                        val currentSpan = createSpan(b3).startSpan().apply { makeCurrent() }
-                        setSpanCustomDimensions()
-                        val startTime = System.currentTimeMillis()
-                        val telemetryRequest = ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry ?: RequestTelemetry()
-                        telemetryRequest.properties.put("CustomKey", "my attribute")
-                        telemetryRequest.context.operation.id = Span.current().spanContext.traceId
-                        telemetryRequest.context.operation.setParentId(Span.current().spanContext.spanId)
-                        telemetryRequest.name = "handling my custom rabbit MQ message" //name of your event
-                        try {
-                            logger.info { "Received notification with body: '${String(delivery.body)}' and properties '${delivery.properties}'" }
-                            val number = handler.handle(String(delivery.body))
-                            logger.info { "Notification processed successfully with number $number" }
-                            telemetryRequest.isSuccess = true
-                            telemetryRequest.responseCode = "200"
-                            delivery.ack()
-                        } catch (exception: Exception) {
-                            logger.error(exception) { "failed to process notification" }
-                            telemetryRequest.isSuccess = false
-                            telemetryRequest.responseCode = "500"
-                            delivery.nack(false)
-                        } finally {
-                            val endTime = System.currentTimeMillis()
-                            telemetryRequest.timestamp = Date(startTime)
-                            telemetryRequest.duration = com.microsoft.applicationinsights.telemetry.Duration(endTime - startTime)
-                            telemetryClient.trackRequest(telemetryRequest)
-                            currentSpan.end()
+                        val currentSpan = createSpan(b3).startSpan()
+                        withContext(currentSpan.asContextElement()){
+                            processMessage(delivery)
                         }
                     }.subscribe()
                 }
+    }
+
+    private suspend fun processMessage(delivery: AcknowledgableDelivery) {
+        setSpanCustomDimensions()
+        val startTime = System.currentTimeMillis()
+        val telemetryRequest = ThreadContext.getRequestTelemetryContext()?.httpRequestTelemetry ?: RequestTelemetry()
+        telemetryRequest.properties.put("CustomKey", "my attribute")
+        telemetryRequest.context.operation.id = Span.current().spanContext.traceId
+        telemetryRequest.context.operation.setParentId(Span.current().spanContext.spanId)
+        telemetryRequest.name = "handling my custom rabbit MQ message" //name of your event
+        try {
+            logger.info { "Received notification with body: '${String(delivery.body)}' and properties '${delivery.properties}'" }
+            val number = handler.handle(String(delivery.body))
+            logger.info { "Notification processed successfully with number $number" }
+            telemetryRequest.isSuccess = true
+            telemetryRequest.responseCode = "200"
+            delivery.ack()
+        } catch (exception: Exception) {
+            logger.error(exception) { "failed to process notification" }
+            telemetryRequest.isSuccess = false
+            telemetryRequest.responseCode = "500"
+            delivery.nack(false)
+        } finally {
+            val endTime = System.currentTimeMillis()
+            telemetryRequest.timestamp = Date(startTime)
+            telemetryRequest.duration = com.microsoft.applicationinsights.telemetry.Duration(endTime - startTime)
+            telemetryClient.trackRequest(telemetryRequest)
+        }
     }
 
     private fun declare(queueConfiguration: MessagingConfiguration.QueueConfiguration) {
