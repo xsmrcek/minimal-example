@@ -25,7 +25,7 @@ class RabbitProcessingSampleHandler(
             val tracer = GlobalOpenTelemetry.getTracerProvider().tracerBuilder("my-tracer").build()
             val parentSpan = Span.current()
 
-            val newSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan().apply { makeCurrent() }
+            val newSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan()
             withContext(newSpan.asContextElement()) {
                 //just call google here :)
                 callGoogle()
@@ -36,7 +36,7 @@ class RabbitProcessingSampleHandler(
             }
 
             // here I would construct message
-            val messageSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan().apply { makeCurrent() }
+            val messageSpan = tracer.spanBuilder("my span with parent").apply { setParent(Context.current().with(parentSpan)) }.startSpan()
             withContext(messageSpan.asContextElement()) {
                 //and send it using azure service bus here, but let's just call google again
                 callGoogle()
