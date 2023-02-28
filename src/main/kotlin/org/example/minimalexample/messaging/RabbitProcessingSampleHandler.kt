@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets
 import kotlin.random.Random
 
 
-@Component
+//@Component
 class RabbitProcessingSampleHandler(
         private val webClient: WebClient
 ) {

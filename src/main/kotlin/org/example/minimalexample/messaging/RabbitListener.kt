@@ -29,17 +29,17 @@ object RabbitConstants {
     const val QUEUE = "queue"
 }
 
-@Configuration
+//@Configuration
 class RabbitListenersConfiguration(
         private val messagingConfiguration: MessagingConfiguration,
         @Value("\${rabbit-messaging.subscription-delay}") private val subscriptionDelay: Long,
         private val handler: RabbitProcessingSampleHandler
 ) {
 
-    @Bean
+    //@Bean
     fun rabbitListener(customRabbitAmqpAdmin: AmqpAdmin, receiver: Receiver) = RabbitListeners(customRabbitAmqpAdmin, messagingConfiguration, subscriptionDelay, receiver, handler)
 
-    @Bean
+    //@Bean
     @ConditionalOnMissingBean
     fun telemetryClient() = TelemetryClient()
 

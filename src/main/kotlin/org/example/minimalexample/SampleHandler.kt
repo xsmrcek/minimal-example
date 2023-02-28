@@ -22,22 +22,27 @@ class SampleHandler(
     suspend fun handle(request: ServerRequest): ServerResponse =
         runCatching {
             logger.info { "processing request" }
-            callGoogle()
-            coroutineScope {
-                async {
-                    callGoogle()
-                    callGoogle()
-                }
-                launch {
-                    callGoogle()
-                }
-            }.join()
+            for(i in 1..100) {
+                callGoogle()
+                coroutineScope {
+                    async {
+                        callGoogle()
+                        callGoogle()
+                    }
+                    launch {
+                        callGoogle()
+                    }
+                }.join()
+            }
         }.fold(
                 onSuccess = {
                     logger.info { "request processed successfully" }
                     ServerResponse.ok().build()
                             },
                 onFailure = {
+                    if(it is kotlin.coroutines.cancellation.CancellationException){
+                        throw it
+                    }
                     logger.info { "request failed" }
                     ServerResponse.status(500).build()
                 }

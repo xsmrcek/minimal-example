@@ -11,26 +11,25 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.0</version>
+        <version>2.7.5</version>
         <relativePath/>
     </parent>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>17</java.version>
         <logbook.version>2.4.1</logbook.version>
-        <java.version>15</java.version>
-        <spring-cloud.version>2021.0.3</spring-cloud.version>
-        <kotlin.version>1.6.21</kotlin.version>
-        <kotlin-coroutines.version>1.6.2</kotlin-coroutines.version>
-        <kotlin-logging.version>2.1.23</kotlin-logging.version>
+        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <kotlin.version>1.7.10</kotlin.version>
+        <kotlin-coroutines.version>1.6.4</kotlin-coroutines.version>
+        <kotlin-logging.version>3.0.4</kotlin-logging.version>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
         <springdoc-openapi-ui.version>1.6.6</springdoc-openapi-ui.version>
-        <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
+        <jaxb2-maven-plugin.version>3.1.0</jaxb2-maven-plugin.version>
         <jaxb2-fluent.api.version>3.0</jaxb2-fluent.api.version>
         <jaxb2-basics-runtime.version>1.11.1</jaxb2-basics-runtime.version>
         <logbook.version>2.14.0</logbook.version>
         <logback.contrib.version>0.1.5</logback.contrib.version>
-        <opentelemetry-version>1.16.0</opentelemetry-version>
+        <opentelemetry-version>1.20.1</opentelemetry-version>
         <applicationinsights-web-version>3.4.1</applicationinsights-web-version>
         <testcontainers.version>1.17.2</testcontainers.version>
     </properties>
